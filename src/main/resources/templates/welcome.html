@@ -42,8 +42,8 @@
         <h3 style="color:#AAAAAA">Users: </h3>
         <h3>Create/Select</h3>
         <div style="border: 1px solid #ccc; width: 355px; height: 65px; overflow: auto; border-radius: 4px;">
-            <div th:each="user: ${users}" class=".users"> <!--todo: to display the users in the list-->
-                <div th:if="${user.active==true}" class=".active-user">
+            <div th:each="user: ${users}" class="users"> <!--todo: to display the users in the list-->
+                <div th:if="${user.active==true}" class="active-user">
                     <!--todo: there is an id here, to check if user is in use and block if try to use it while in user-->
                     <span th:if="${not user.messages.isEmpty}">
                         <a th:href="@{/setUser/{user_id}(user_id=${user.user_id})}"><h3 style=" color:#ff5959">[[${user.username}]]</h3></a>
@@ -140,8 +140,8 @@
 <script type="text/javascript">
 
 var userDelButton = document.querySelector("#userDelButton");// to block deleting if user is active and have messages
- var users = document.querySelectorAll("users");// to display dynamically the users list WORK ON THIS TO!!!!
- var activeUsers = document.querySelectorAll("active-user");// to block if user is active and have messages
+ var users = document.querySelectorAll(".users");// to display dynamically the users list WORK ON THIS TO!!!!
+ var activeUsers = document.querySelectorAll(".active-user");// to block if user is active and have messages
  var createUserButton = document.querySelector("#createUser");// to make sure a username is not created twice or empty
  var usernameTextBox = document.querySelector("#username");// to make sure a username is not created twice or empty
  var chatRoomsList = document.querySelector("#chatRoomsList");// to display dynamically the chat rooms list
@@ -170,7 +170,7 @@ createUserButton.addEventListener("click", function() {
          return response.json();
      })
      .then(function (data) {
-         console.log(data);
+         console.log(data,"already exists username");
          if (data == true) {
              alert("Username already exists, please choose/create another one");
          }
@@ -197,7 +197,7 @@ createChannelButton.addEventListener("click", function() {
          return response.json();
      })
      .then(function (data) {
-         console.log(data);
+         console.log(data,"already exists channel name");
          if (data == true) {
              alert("channel name already exists, please choose/create another one");
          }
