@@ -8,13 +8,14 @@ import assignment14.SimpleChat.service.ChatRoomService;
 import assignment14.SimpleChat.service.MessageService;
 import assignment14.SimpleChat.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.List;
-
+import java.util.Map;
 
 
 @Controller
@@ -51,9 +52,11 @@ public class ChatRoomController {
 
     @GetMapping("/{room_id}/messages")
     @ResponseBody
-    public ChatRoomDto getMessagesForChatRoom(@PathVariable Long room_id) {
+    public Map<Long,List<String>> getMessagesForChatRoom(@PathVariable Long room_id) {
         ChatRoom chatRoom = chatRoomService.findById(room_id);
-        return chatRoomService.findByIdDto(room_id);
+        ChatRoomDto chatRoomDto = chatRoomService.findByIdDto(room_id);
+        return chatRoomDto.getMessages();
     }
+
 
 }
