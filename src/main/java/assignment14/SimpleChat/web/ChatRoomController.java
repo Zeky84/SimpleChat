@@ -32,6 +32,7 @@ public class ChatRoomController {
         this.userService = userService;
         this.messageService = messageService;
     }
+
     @GetMapping("")
     public String handlePageErrors() {
         return "chatroom";
@@ -52,7 +53,7 @@ public class ChatRoomController {
 
     @GetMapping("/{room_id}/messages")
     @ResponseBody
-    public Map<Long,List<String>> getMessagesForChatRoom(@PathVariable Long room_id) {
+    public Map<Long, List<String>> getMessagesForChatRoom(@PathVariable Long room_id) {
         ChatRoom chatRoom = chatRoomService.findById(room_id);
         ChatRoomDto chatRoomDto = chatRoomService.findByIdDto(room_id);
         return chatRoomDto.getMessages();

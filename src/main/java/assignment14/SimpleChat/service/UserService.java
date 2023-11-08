@@ -43,22 +43,25 @@ public class UserService {
 
 
     public void deleteUser(Long user_id) {
-            //Only user with no messages while not active on chat room can be deleted
-            User user = userRepository.findById(user_id).orElse(null);
-            assert user != null;
-            if (user.getMessages().isEmpty() && !user.isActive()) {
-                List<ChatRoom> chatRooms = user.getRooms();
-                for(ChatRoom chatRoom: chatRooms){
-                    chatRoom.getUsers().remove(user);
-                    chatRoomRepository.save(chatRoom);
-                }
+        //Only user with no messages while not active on chat room can be deleted
+        User user = userRepository.findById(user_id).orElse(null);
+        assert user != null;
+        if (!user.isActive()) {
+            for (ChatRoom chatRoom : user.getRooms()) {
+                chatRoom.getUsers().remove(user);
+                chatRoomRepository.save(chatRoom);
+            }
+            for (Message message : user.getMessages()) {
+                messageRepository.delete(message);
+            }
 
-                userRepository.deleteById(user_id);
-            }
-            if (userRepository.findAll().isEmpty()) {
-                chatRoomRepository.deleteAll();
-            }
+            userRepository.deleteById(user_id);
         }
+        if (userRepository.findAll().isEmpty()) {
+            chatRoomRepository.deleteAll();
+        }
+    }
+
     public Optional<User> findByUsername(String username) {
         return userRepository.findByUsername(username);
     }
@@ -68,6 +71,7 @@ public class UserService {
         List<User> users = userRepository.findAll();
         return users.stream().map(this::convertUserToUserDto).toList();
     }
+
     // This method is used to convert a User entity to a UserDto object
     private UserDto convertUserToUserDto(@NotNull User user, String message) {
         UserDto dto = new UserDto();
@@ -77,6 +81,7 @@ public class UserService {
         dto.setMessages(user.getMessages().stream().map(Message::getStringMessage).toList());
         return dto;
     }
+
     private UserDto convertUserToUserDto(User user) {
         return convertUserToUserDto(user, null); // or you can set a default message here
     }

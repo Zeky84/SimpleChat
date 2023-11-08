@@ -25,7 +25,6 @@ public class WelcomeController {
     User setUser = null; // this is the user that is going to be select, but not active yet. Is going to be active when go to chatroom
 
 
-
     public WelcomeController(UserService userService, ChatRoomService chatRoomService, MessageService messageService, ChatRoomRepository chatRoomRepository) {
         this.userService = userService;
         this.chatRoomService = chatRoomService;
@@ -34,7 +33,7 @@ public class WelcomeController {
 
     @GetMapping("/welcome/deactivate/{room_id}/user/{user_id}")
     public String deactivateUser(@PathVariable Long user_id, @PathVariable Long room_id) {
-        if(userService.findById(user_id)==null){
+        if (userService.findById(user_id) == null) {
             return "redirect:/welcome";
         }
         ChatRoom chatRoom = chatRoomService.findById(room_id);
@@ -63,11 +62,11 @@ public class WelcomeController {
 
     @PostMapping("/createUser")
     public String saveUser(User user) {
-        if(user.getUsername()==null || user.getUsername().isEmpty()){
-        System.out.println("!!!USERNAME FIELD IS EMPTY!!! NOT ALLOWED");
+        if (user.getUsername() == null || user.getUsername().isEmpty()) {
+            System.out.println("!!!USERNAME FIELD IS EMPTY!!! NOT ALLOWED");
             return "redirect:/welcome";
         }
-        if(userService.findByUsername(user.getUsername()).isPresent()){
+        if (userService.findByUsername(user.getUsername()).isPresent()) {
             System.out.println("!!!USERNAME ALREADY EXISTS!!! NOT ALLOWED");
             return "redirect:/welcome";
         }
@@ -77,11 +76,11 @@ public class WelcomeController {
 
     @PostMapping("/createChatRoom")
     public String saveChatRoom(ChatRoom chatRoom) {
-        if(chatRoom.getChatRoomName()==null || chatRoom.getChatRoomName().isEmpty()){
+        if (chatRoom.getChatRoomName() == null || chatRoom.getChatRoomName().isEmpty()) {
             System.out.println("!!!CHATROOM IS EMPTY!!! NOT ALLOWED");
             return "redirect:/welcome";
         }
-        if(chatRoomService.findByChatRoomName(chatRoom.getChatRoomName()).isPresent()){
+        if (chatRoomService.findByChatRoomName(chatRoom.getChatRoomName()).isPresent()) {
             System.out.println("!!!CHATROOM ALREADY EXISTS!!! NOT ALLOWED");
             return "redirect:/welcome";
         }
@@ -91,7 +90,7 @@ public class WelcomeController {
 
     @GetMapping("/setUser/{user_id}")
     public String setUser(@PathVariable Long user_id, ModelMap model) {
-        if (!userService.findById(user_id).isActive()){
+        if (!userService.findById(user_id).isActive()) {
             setUser = userService.findById(user_id);
             userService.saveUser(setUser);
             model.put("setUser", setUser);
@@ -105,10 +104,11 @@ public class WelcomeController {
         model.put("chatRoom", chatRoom);
         return "redirect:/welcome";
     }
+
     @GetMapping("chatroom/{room_id}/user_id/{user_id}")
     public String setUserChatRoom(@PathVariable Long room_id, @PathVariable Long user_id, ModelMap model) {
         //to handle error
-        if(userService.findById(user_id)==null || chatRoomService.findById(room_id)==null){
+        if (userService.findById(user_id) == null || chatRoomService.findById(room_id) == null) {
             return "redirect:/chatroom";
         }
         User user = userService.findById(user_id);
@@ -116,18 +116,18 @@ public class WelcomeController {
         Message message = new Message();
 
         //to set user to active once enter the chatroom
-        if(user != null && !user.isActive()){
+        if (user != null && !user.isActive()) {
             user.setActive(true);
             userService.saveUser(user);
         }
         //to set the join table between the user and chatroom
-        if(!chatRoom.getUsers().contains(user)){
-        user.getRooms().add(chatRoom);
-        userService.saveUser(user);
-        chatRoom.getUsers().add(user);
-        chatRoomService.saveChatRoom(chatRoom);
-        //setting setUser to null because is already in the chatroom and is active
-        setUser=null;
+        if (!chatRoom.getUsers().contains(user)) {
+            user.getRooms().add(chatRoom);
+            userService.saveUser(user);
+            chatRoom.getUsers().add(user);
+            chatRoomService.saveChatRoom(chatRoom);
+            //setting setUser to null because is already in the chatroom and is active
+            setUser = null;
         }
         model.put("user", user);
         model.put("chatRoom", chatRoom);
@@ -147,21 +147,22 @@ public class WelcomeController {
     public Boolean userExists(@RequestParam String username) {
         return userService.findByUsername(username).isPresent();
     }
+
     @GetMapping("/chatroomExists")
     @ResponseBody
-    public Boolean chatroomExists(@RequestParam String chatRoomName){
+    public Boolean chatroomExists(@RequestParam String chatRoomName) {
         return chatRoomService.findByChatRoomName(chatRoomName).isPresent();
     }
 
     @GetMapping("/getUsers")
     @ResponseBody
-    public List<UserDto> getUsers(){
+    public List<UserDto> getUsers() {
         return userService.findAllUsersDto();
     }
 
     @GetMapping("/getChatRooms")
     @ResponseBody
-    public List<ChatRoom> getChatRooms(){
+    public List<ChatRoom> getChatRooms() {
         return chatRoomService.findAll();
     }
 
