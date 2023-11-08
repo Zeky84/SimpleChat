@@ -2,79 +2,142 @@
 <html lang="en" xmlns:th="http://thymeleaf.org">
 <head>
     <title>chat app</title>
-    <script src="https://kit.fontawesome.com/17e9292b04.js" crossorigin="anonymous"></script>
+    <script
+            src="https://kit.fontawesome.com/17e9292b04.js"
+            crossorigin="anonymous"
+    ></script>
     <style>
-        body {display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0;}
-        .container {text-align: center;}
-        button {background-color: #3498db; border: 1px solid #ccc; color: white; padding: 2px 5px; text-align: center; text-decoration: none;
-                display: inline-block; font-size: 16px; border-radius: 4px; cursor: pointer; white-space: nowrap; transition: background-color 0.3s;
-                margin-left: 3px; height: 40px; width: 150px;}
-        button:hover { background-color: #2980b9;}
+        body {
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          height: 100vh;
+          margin: 0;
+        }
+        .container {
+          text-align: center;
+        }
+        button {
+          background-color: #3498db;
+          border: 1px solid #ccc;
+          color: white;
+          padding: 2px 5px;
+          text-align: center;
+          text-decoration: none;
+          display: inline-block;
+          font-size: 16px;
+          border-radius: 4px;
+          cursor: pointer;
+          white-space: nowrap;
+          transition: background-color 0.3s;
+          margin-left: 3px;
+          height: 40px;
+          width: 150px;
+        }
+        button:hover {
+          background-color: #2980b9;
+        }
         input::placeholder {
-            color: #CCCCCC; font-style: italic; padding-left: 5px; font-size: 1.1em;}
+          color: #cccccc;
+          font-style: italic;
+          padding-left: 5px;
+          font-size: 1.1em;
+        }
         input {
-            padding: 12px 25px;font-size: 16px;border: 1px solid #ccc;border-radius: 4px;width: 200px;box-sizing: border-box;
-            height: 40px;margin: 3px;}
-        h4 {color: #ff5959;font-size: 12px;}
-        h3 {color: #3498db;font-size: 20px;}
-        h2 {color: #AAAAAA;}
-        h1 { color: #3498db;}
-        h1, h3, h4 {display: inline;}
+          padding: 12px 25px;
+          font-size: 16px;
+          border: 1px solid #ccc;
+          border-radius: 4px;
+          width: 200px;
+          box-sizing: border-box;
+          height: 40px;
+          margin: 3px;
+        }
+        h4 {
+          font-size: 12px;
+        }
+        h3 {
+          color: #3498db;
+          font-size: 20px;
+        }
+        h2 {
+          color: #aaaaaa;
+        }
+        h1 {
+          color: #3498db;
+        }
+        h1,
+        h3,
+        h4 {
+          display: inline;
+        }
     </style>
 </head>
 <body>
 <div class="container">
     <h1>Welcome to Simple Chat</h1>
-    <br>
+    <br/>
     <div th:if="${#lists.size(chatRooms)>0 and #lists.size(users)==0}">
-        <h3 style="color:#AAAAAA">Please Create Chat User </h3>
+        <h3 style="color: #aaaaaa">Please Create Chat User</h3>
     </div>
     <div th:if="${setUser!=null }">
         <h3>[[${setUser.username}]]</h3>
-        <h3 style="color:black">join channel!</h3>
-        <form th:action="@{/deleteUser/{user_id}(user_id=${setUser.user_id})}" method="post">
+        <h3 style="color: black">join channel!</h3>
+        <form
+                th:action="@{/deleteUser/{user_id}(user_id=${setUser.user_id})}"
+                method="post"
+        >
             <button type="submit" id="userDelButton">Delete User</button>
-            <!--todo: there is an id here, if active and have messages cant be delete-->
         </form>
     </div>
-    <br>
+    <br/>
 
     <div th:if="${#lists.size(users)>0}">
-        <h3 style="color:#AAAAAA">Users: </h3>
+        <h3 style="color: #aaaaaa">Users:</h3>
         <h3>Create/Select</h3>
-        <div style="border: 1px solid #ccc; width: 355px; height: 65px; overflow: auto; border-radius: 4px;">
-            <div th:each="user: ${users}" class="users"> <!--todo: to display the users in the list-->
+        <div
+                style="
+            border: 1px solid #ccc;
+            width: 355px;
+            height: 65px;
+            overflow: auto;
+            border-radius: 4px;
+          "
+        >
+            <div th:each="user: ${users}" class="users">
                 <div th:if="${user.active==true}" class="active-user">
-                    <!--todo: there is an id here, to check if user is in use and block if try to use it while in user-->
-                    <span th:if="${not user.messages.isEmpty}">
-
-                        <a th:href="@{/setUser/{user_id}(user_id=${user.user_id})}"><i style=" color:#ff5959"
-                                                                                       class="fa-solid fa-user-slash"></i><h3
-                                style=" color:#ff5959">[[${user.username}]]</h3></a>
-                        <h4>started messaging</h4>
-                    </span>
+              <span th:if="${not user.messages.isEmpty}">
+                <a th:href="@{/setUser/{user_id}(user_id=${user.user_id})}"
+                ><i style="color: #ff5959" class="fa-solid fa-user-slash"></i>
+                  <h3 style="color: #ff5959">[[${user.username}]]</h3></a
+                >
+                <h4>messaging in...</h4>
+                <h4 style="color: #3498db;">[[${user.rooms[0].chatRoomName}]]</h4>
+              </span>
                     <span th:if="${user.messages.isEmpty}">
-
-                        <a th:href="@{/setUser/{user_id}(user_id=${user.user_id})}"><i style=" color:#ff5959"
-                                                                                       class="fa-solid fa-user-slash"></i><h3
-                                style=" color:#ff5959">[[${user.username}]]</h3></a>
-                        <h4>already in chat room</h4>
-                    </span>
+                <a th:href="@{/setUser/{user_id}(user_id=${user.user_id})}"
+                ><i style="color: #ff5959" class="fa-solid fa-user-slash"></i>
+                  <h3 style="color: #ff5959">[[${user.username}]]</h3></a
+                >
+                <h4>in chat room: </h4>
+                <h4 style="color: #3498db;">[[${user.rooms[0].chatRoomName}]]</h4>
+              </span>
                 </div>
                 <div th:if="${user.active==false}">
-                    <span th:if="${user.messages.isEmpty}">
-
-                        <a th:href="@{/setUser/{user_id}(user_id=${user.user_id})}"><i style=" color:#3498db"
-                                                                                       class="fa-solid fa-user"></i><h3>[[${user.username}]]</h3></a>
-                    </span>
+              <span th:if="${user.messages.isEmpty}">
+                <a th:href="@{/setUser/{user_id}(user_id=${user.user_id})}"
+                ><i style="color: #3498db" class="fa-solid fa-user"></i>
+                  <h3>[[${user.username}]]</h3></a
+                >
+              </span>
                     <span th:if="${not user.messages.isEmpty}">
-
-                        <a th:href="@{/setUser/{user_id}(user_id=${user.user_id})}"><i style=" color:#3498db"
-                                                                                       class="fa-solid fa-user"></i><h3>[[${user.username}]]</h3></a>
-                        <h4>user with messages</h4>
-                    </span>
+                <a th:href="@{/setUser/{user_id}(user_id=${user.user_id})}"
+                ><i style="color: #3498db" class="fa-solid fa-user"></i>
+                  <h3>[[${user.username}]]</h3></a
+                >
+                <h4>user with messages</h4>
+              </span>
                 </div>
-
             </div>
         </div>
     </div>
@@ -82,53 +145,82 @@
     <div>
         <form th:action="@{/createUser}" method="post">
             <div>
-                <input type="hidden" th:field="${user.user_id}">
+                <input type="hidden" th:field="${user.user_id}"/>
             </div>
             <div>
                 <button type="submit" id="createUser">Create User</button>
-                <!--todo: there is an id here, to check if user with already name exist and block-->
                 <label>
-                    <input type="text" th:field="${user.username}" placeholder="user name" id="username">
-                    <!--another id-->
+                    <input
+                            type="text"
+                            th:field="${user.username}"
+                            placeholder="user name"
+                            id="username"
+                    />
                 </label>
             </div>
         </form>
     </div>
-    <br>
+    <br/>
     <div th:if="${#lists.size(chatRooms)==0 and #lists.size(users)>0}">
-        <h3 style="color:#AAAAAA">Please Create Chat Channel </h3>
+        <h3 style="color: #aaaaaa">Please Create Chat Channel</h3>
     </div>
     <div>
-        <div th:if="${#lists.size(chatRooms)>0}" id="chatRoomsList"><!--todo: to display the chat rooms in the list-->
+        <div th:if="${#lists.size(chatRooms)>0}" id="chatRoomsList">
             <div style="display: inline-block">
-                <h3 style="display: inline; color: #AAAAAA">Chat channels:</h3>
-                <h3 th:if="${setUser==null}" style="display: inline; color:#ff5959">(Select user to join)</h3>
+                <h3 style="display: inline; color: #aaaaaa">Chat channels:</h3>
+                <h3
+                        th:if="${setUser==null}"
+                        style="display: inline; color: #0a0a0a"
+                >
+                    (Select user to join)
+                </h3>
             </div>
-            <div style="border: 1px solid #ccc; width: 355px; height: 65px; overflow: auto; border-radius: 4px;">
+            <div
+                    style="
+              border: 1px solid #ccc;
+              width: 355px;
+              height: 65px;
+              overflow: auto;
+              border-radius: 4px;
+            "
+            >
                 <div th:each="chatRoom: ${chatRooms}">
                     <div th:if="${setUser!=null}">
-                        <a th:href="@{/chatroom/{room_id}/user_id/{user_id}(room_id=${chatRoom.room_id},user_id=${setUser.user_id})}">
-                            <h3>[[${chatRoom.chatRoomName}]] </h3>
+                        <a
+                                th:href="@{/chatroom/{room_id}/user_id/{user_id}(room_id=${chatRoom.room_id},user_id=${setUser.user_id})}"
+                        >
+                            <h3>[[${chatRoom.chatRoomName}]]</h3>
                         </a>
-                        <h4 th:if="${chatRoom.users.isEmpty}" style="color: #AAAAAA">Not users yet</h4>
-                        <i th:if="${not chatRoom.users.isEmpty}" style="color: #3498db"
-                           class="fa-solid fa-user-group">: </i>
+                        <h4 th:if="${chatRoom.users.isEmpty}" style="color: #aaaaaa">
+                            empty channel
+                        </h4>
+                        <i
+                                th:if="${not chatRoom.users.isEmpty}"
+                                style="color: #3498db"
+                                class="fa-solid fa-user-group"
+                        >:
+                        </i>
                         <h4 th:each="user, iterStat: ${chatRoom.users}">
                             [[${user.username}]]
                             <span th:unless="${iterStat.last}">,</span>
                         </h4>
                     </div>
                     <div th:if="${setUser==null}">
-                        <h3>[[${chatRoom.chatRoomName}]] </h3>
-                        <h4 th:if="${chatRoom.users.isEmpty}" style="color: #AAAAAA">Not users yet</h4>
-                        <i th:if="${not chatRoom.users.isEmpty}" style="color: #3498db"
-                           class="fa-solid fa-user-group">: </i>
+                        <h3>[[${chatRoom.chatRoomName}]]</h3>
+                        <h4 th:if="${chatRoom.users.isEmpty}" style="color: #aaaaaa">
+                            empty channel
+                        </h4>
+                        <i
+                                th:if="${not chatRoom.users.isEmpty}"
+                                style="color: #3498db"
+                                class="fa-solid fa-user-group"
+                        >:
+                        </i>
                         <h4 th:each="user, iterStat: ${chatRoom.users}">
                             [[${user.username}]]
                             <span th:unless="${iterStat.last}">,</span>
                         </h4>
                     </div>
-
                 </div>
             </div>
         </div>
@@ -137,92 +229,103 @@
     <div>
         <form th:action="@{/createChatRoom}" method="post">
             <div>
-                <input type="hidden" th:field="${chatRoom.room_id}">
+                <input type="hidden" th:field="${chatRoom.room_id}"/>
             </div>
             <div>
                 <button type="submit" id="createChannel">Create channel</button>
-                <!--todo: to block if channel with same name exist-->
                 <label>
-                    <input type="text" th:field="${chatRoom.chatRoomName}" placeholder="channel name"
-                           id="channelName">
+                    <input
+                            type="text"
+                            th:field="${chatRoom.chatRoomName}"
+                            placeholder="channel name"
+                            id="channelName"
+                    />
                 </label>
             </div>
         </form>
     </div>
-
 </div>
 <script type="text/javascript">
+    var userDelButton = document.querySelector("#userDelButton"); // to block deleting if user is active and have messages
+    var users = document.querySelectorAll(".users"); // to display dynamically the users list WORK ON THIS TO!!!!
+    var activeUsers = document.querySelectorAll(".active-user"); // to block if user is active and have messages
+    var createUserButton = document.querySelector("#createUser"); // to make sure a username is not created twice or empty
+    var usernameTextBox = document.querySelector("#username"); // to make sure a username is not created twice or empty
+    var chatRoomsList = document.querySelector("#chatRoomsList"); // to display dynamically the chat rooms list
+    var createChannelButton = document.querySelector("#createChannel"); // to make sure a channel name is not created twice or empty
+    var channelNameTextBox = document.querySelector("#channelName"); // to make sure a channel name is not created twice or empty
 
-    var userDelButton = document.querySelector("#userDelButton");// to block deleting if user is active and have messages
-     var users = document.querySelectorAll(".users");// to display dynamically the users list WORK ON THIS TO!!!!
-     var activeUsers = document.querySelectorAll(".active-user");// to block if user is active and have messages
-     var createUserButton = document.querySelector("#createUser");// to make sure a username is not created twice or empty
-     var usernameTextBox = document.querySelector("#username");// to make sure a username is not created twice or empty
-     var chatRoomsList = document.querySelector("#chatRoomsList");// to display dynamically the chat rooms list
-     var createChannelButton = document.querySelector("#createChannel");// to make sure a channel name is not created twice or empty
-     var channelNameTextBox = document.querySelector("#channelName");// to make sure a channel name is not created twice or empty
-
-     activeUsers.forEach(function (activeUser) {
-         activeUser.addEventListener("click", ()=> {
-             console.log("active user");
-             alert("Active user can't be selected, please select/create another user");
-         });
-     });
-
-
-    createUserButton.addEventListener("click", function() {
-     if (usernameTextBox.value === "") {
-         alert("Please enter a username");
-     }
-     else {
-         fetch(`/userExists?username=${usernameTextBox.value}`)
-         .then(function (response) {
-             if (!response.ok) {
-                 throw new Error("Network response was not ok");
-             }
-             return response.json();
-         })
-         .then(function (data) {
-             console.log(data,"already exists username");
-             if (data == true) {
-                 alert("Username already exists, please choose/create another one");
-             }
-         })
-         .catch(function (error) {
-             console.log("There was a problem with the fetch operation:", error.message);
-             alert("Error occurred while checking username. Please try again.");
-         });
-     }
+    activeUsers.forEach(function (activeUser) {
+      activeUser.addEventListener("click", () => {
+        console.log("active user");
+        alert(
+          "Active user can't be selected, please select/create another user"
+        );
+      });
     });
 
-
-    createChannelButton.addEventListener("click", function() {
-     if (channelNameTextBox.value === "") {
-         console.log("empty channel name");
-         alert("Please enter a channel name");
-     }
-     else {
-         fetch(`/chatroomExists?chatRoomName=${channelNameTextBox.value}`)
-         .then(function (response) {
-             if (!response.ok) {
-                 throw new Error("Network response was not ok");
-             }
-             return response.json();
-         })
-         .then(function (data) {
-             console.log(data,"already exists channel name");
-             if (data == true) {
-                 alert("channel name already exists, please choose/create another one");
-             }
-         })
-         .catch(function (error) {
-             console.log("There was a problem with the fetch operation:", error.message);
-             alert("Error occurred while checking username. Please try again.");
-         });
-     }
+    createUserButton.addEventListener("click", function () {
+      if (usernameTextBox.value === "") {
+        alert("Please enter a username");
+      } else {
+        fetch(`/userExists?username=${usernameTextBox.value}`)
+          .then(function (response) {
+            if (!response.ok) {
+              throw new Error("Network response was not ok");
+            }
+            return response.json();
+          })
+          .then(function (data) {
+            console.log(data, "already exists username");
+            if (data == true) {
+              alert(
+                "Username already exists, please choose/create another one"
+              );
+            }
+          })
+          .catch(function (error) {
+            console.log(
+              "There was a problem with the fetch operation:",
+              error.message
+            );
+            alert(
+              "Error occurred while checking username. Please try again."
+            );
+          });
+      }
     });
 
-
+    createChannelButton.addEventListener("click", function () {
+      if (channelNameTextBox.value === "") {
+        console.log("empty channel name");
+        alert("Please enter a channel name");
+      } else {
+        fetch(`/chatroomExists?chatRoomName=${channelNameTextBox.value}`)
+          .then(function (response) {
+            if (!response.ok) {
+              throw new Error("Network response was not ok");
+            }
+            return response.json();
+          })
+          .then(function (data) {
+            console.log(data, "already exists channel name");
+            if (data == true) {
+              alert(
+                "channel name already exists, please choose/create another one"
+              );
+            }
+          })
+          .catch(function (error) {
+            console.log(
+              "There was a problem with the fetch operation:",
+              error.message
+            );
+            alert(
+              "Error occurred while checking username. Please try again."
+            );
+          });
+      }
+    });
 </script>
 </body>
 </html>

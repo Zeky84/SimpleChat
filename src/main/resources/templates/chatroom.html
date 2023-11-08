@@ -1,66 +1,89 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://thymeleaf.org">
 <head>
-
     <title th:if="${user==null || chatRoom==null}">Error!!!</title>
     <title th:if="${user!=null and chatRoom!=null}">ChatRoom</title>
-    <script src="https://kit.fontawesome.com/17e9292b04.js"crossorigin="anonymous"></script>
+    <script
+            src="https://kit.fontawesome.com/17e9292b04.js"
+            crossorigin="anonymous"
+    ></script>
     <style>
-        h1, h2, h4 {display: inline;}
+        h1,
+        h2,
+        h4 {
+          display: inline;
+        }
 
-        h1, h4 {color: #3498db;}
+        h1,
+        h4 {
+          color: #3498db;
+        }
     </style>
 </head>
 <body>
 <div th:if="${user==null || chatRoom==null}">
-    <h3 style="color:#ff5959">Wrong page</h3><h3>!!! Set user and Channel on welcome page</h3>
-    <a th:href="@{/welcome}" style="margin-right:2em">Go to welcome page</a>
+    <h3 style="color: #ff5959">Wrong page</h3>
+    <h3>!!! Set user and Channel on welcome page</h3>
+    <a th:href="@{/welcome}" style="margin-right: 2em">Go to welcome page</a>
 </div>
 <div th:if="${user!=null and chatRoom!=null}">
-    <h2>Channel:</h2>
-    <h1>[[${chatRoom.chatRoomName}]]</h1><i style="margin-left: 2em" class="fa-solid fa-user fa-2x"></i><h1>[[${user.username}]]</h1>
-
-    <div id="chatRoomMessages">
+    <div>
+        <h2>Channel:</h2>
+        <h1>[[${chatRoom.chatRoomName}]]</h1>
+        <i style="margin-left: 2em" class="fa-solid fa-user fa-2x"></i>
+        <h1>[[${user.username}]]</h1>
     </div>
-    
-    <form th:action="@{/chatroom/{room_id}/user_id/{user_id}(room_id=${chatRoom.room_id},user_id=${user.user_id})}"
-          method="post">
-        <input type="hidden" th:field="${chatRoom.room_id}" id="room_id">
-        <input type="hidden" th:field="${user.user_id}">
-        <input type="text" th:field="${message.stringMessage}" placeholder="message here">
-        <button type="submit" style="color:blue" id="sendButton">Send</button>
+
+    <div id="chatRoomMessages"></div>
+
+    <form
+            th:action="@{/chatroom/{room_id}/user_id/{user_id}(room_id=${chatRoom.room_id},user_id=${user.user_id})}"
+            method="post"
+    >
+        <input type="hidden" th:field="${chatRoom.room_id}" id="room_id"/>
+        <input type="hidden" th:field="${user.user_id}"/>
+        <input
+                type="text"
+                th:field="${message.stringMessage}"
+                placeholder="message here"
+        />
+        <button type="submit" style="color: blue" id="sendButton">Send</button>
     </form>
     <div>
-        <a th:href="@{/welcome/deactivate/{room_id}/user/{user_id}(room_id=${chatRoom.room_id},user_id=${user.user_id})}" style="margin-right:2em">Back</a>
+        <a
+                th:href="@{/welcome/deactivate/{room_id}/user/{user_id}(room_id=${chatRoom.room_id},user_id=${user.user_id})}"
+                style="margin-right: 2em"
+        >Back</a
+        >
     </div>
 </div>
 <script>
-function updateChatMessages() {
-  const roomId = document.getElementById('room_id').value;
-  fetch(`/chatroom/${roomId}/messages`)
-    .then(response => response.json())
-    .then(messages => {
-      console.log(messages);// For debugging purposes
-      const userAndMessageContainer = document.getElementById('chatRoomMessages');
-      userAndMessageContainer.innerHTML = ''; // Clear current messages
-      //iteration in Messages Map
-      Object.entries(messages).forEach(([messageId, messageData]) => {
-        if (Array.isArray(messageData) && messageData.length >= 2) {
-          const user = messageData[0];
-          const text = messageData[1];
-          const messageElement = document.createElement('div');
-          messageElement.innerHTML = `<h4>${user}:</h4> <h4 style="color: black">${text}</h4>`;
-          userAndMessageContainer.appendChild(messageElement);
-        }
-      });
-    })
-    .catch(error => console.error('Error fetching messages:', error));
-}
-// Poll for new messages every 3 seconds
-setInterval(updateChatMessages, 3000);
-// Initial call to load the messages when the page is first loaded
-updateChatMessages();
-  </script>
-
+    function updateChatMessages() {
+      const roomId = document.getElementById("room_id").value;
+      fetch(`/chatroom/${roomId}/messages`)
+        .then((response) => response.json())
+        .then((messages) => {
+          console.log(messages); // For debugging purposes
+          const userAndMessageContainer =
+            document.getElementById("chatRoomMessages");
+          userAndMessageContainer.innerHTML = ""; // Clear current messages
+          //iteration in Messages Map
+          Object.entries(messages).forEach(([messageId, messageData]) => {
+            if (Array.isArray(messageData) && messageData.length >= 2) {
+              const user = messageData[0];
+              const text = messageData[1];
+              const messageElement = document.createElement("div");
+              messageElement.innerHTML = `<h4>${user}:</h4> <h4 style="color: black">${text}</h4>`;
+              userAndMessageContainer.appendChild(messageElement);
+            }
+          });
+        })
+        .catch((error) => console.error("Error fetching messages:", error));
+    }
+    // Poll for new messages every 3 seconds
+    setInterval(updateChatMessages, 3000);
+    // Initial call to load the messages when the page is first loaded
+    updateChatMessages();
+</script>
 </body>
 </html>
