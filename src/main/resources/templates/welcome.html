@@ -95,9 +95,6 @@
       <div th:if="${#lists.size(users)>0}">
         <h3 style="color: #aaaaaa">Users:</h3>
         <h3>Create/Select</h3>
-
-        <!-- <div id="usersList"></div> -->
-
         <div
           style="
             border: 1px solid #ccc;
@@ -109,22 +106,22 @@
         >
           <div th:each="user: ${users}" class="users">
             <div th:if="${user.active==true}" class="active-user">
-              <span th:if="${not user.messages.isEmpty}">
-                <a th:href="@{/setUser/{user_id}(user_id=${user.user_id})}"
-                  ><i style="color: #ff5959" class="fa-solid fa-user-slash"></i>
-                  <h3 style="color: #ff5959">[[${user.username}]]</h3></a
-                >
-                <h4>messaging in...</h4>
-                <h4 style="color: #3498db">
-                  [[${user.rooms[0].chatRoomName}]]
-                </h4>
-              </span>
-              <span th:if="${user.messages.isEmpty}">
+              <span th:if="${user.rooms[0].messages.isEmpty}">
                 <a th:href="@{/setUser/{user_id}(user_id=${user.user_id})}"
                   ><i style="color: #ff5959" class="fa-solid fa-user-slash"></i>
                   <h3 style="color: #ff5959">[[${user.username}]]</h3></a
                 >
                 <h4>in chat room:</h4>
+                <h4 style="color: #3498db">
+                  [[${user.rooms[0].chatRoomName}]]
+                </h4>
+              </span>
+              <span th:if="${not user.rooms[0].messages.isEmpty}">
+                <a th:href="@{/setUser/{user_id}(user_id=${user.user_id})}"
+                  ><i style="color: #ff5959" class="fa-solid fa-user-slash"></i>
+                  <h3 style="color: #ff5959">[[${user.username}]]</h3></a
+                >
+                <h4>messaging in...</h4>
                 <h4 style="color: #3498db">
                   [[${user.rooms[0].chatRoomName}]]
                 </h4>
