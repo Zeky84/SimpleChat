@@ -38,7 +38,8 @@ public class WelcomeController {
         }
         ChatRoom chatRoom = chatRoomService.findById(room_id);
         User user = userService.findById(user_id);
-        user.setActive(false);
+        user.setInChatRoom(false);
+//        setUser=user;
         chatRoom.getUsers().remove(user);
         user.getRooms().remove(chatRoom);
         chatRoomService.saveChatRoom(chatRoom);
@@ -90,11 +91,21 @@ public class WelcomeController {
 
     @GetMapping("/setUser/{user_id}")
     public String setUser(@PathVariable Long user_id, ModelMap model) {
-        if (!userService.findById(user_id).isActive()) {
-            setUser = userService.findById(user_id);
-            userService.saveUser(setUser);
-            model.put("setUser", setUser);
+        //to select the user if not selected yet
+        if(setUser==null){
+            if (!userService.findById(user_id).isSelected()) {
+                setUser = userService.findById(user_id);
+                setUser.setSelected(true);
+                userService.saveUser(setUser);
+                model.put("setUser", setUser);
+            }
         }
+
+//        if (setUser.isSelected() & !setUser.isInChatRoom()) {
+//                setUser.setSelected(false);
+//                userService.saveUser(setUser);
+//        }
+
         return "redirect:/welcome";
     }
 
@@ -109,17 +120,25 @@ public class WelcomeController {
     public String setUserChatRoom(@PathVariable Long room_id, @PathVariable Long user_id, ModelMap model) {
         //to handle error
         if (userService.findById(user_id) == null || chatRoomService.findById(room_id) == null) {
+            System.out.println("!!!USER OR CHATROOM DOES NOT EXIST!!! NOT ALLOWED chatroom access");
             return "redirect:/chatroom";
         }
+        //to avoid accessing chatroom if as a user is already active in a chatroom.
+//        if(userService.findById(user_id).isActive() && setUser == null){
+//            System.out.println("!!!This USER IS already ACTIVE in a chat room!!! NOT ALLOWED chatroom access");
+//            return "redirect:/chatroom";
+//        }
+
         User user = userService.findById(user_id);
+        user.setInChatRoom(true);//set user to inChatRoom(true)
         ChatRoom chatRoom = chatRoomService.findById(room_id);
         Message message = new Message();
 
         //to set user to active once enter the chatroom
-        if (user != null && !user.isActive()) {
-            user.setActive(true);
-            userService.saveUser(user);
-        }
+//        if (user != null && !user.isActive()) {
+//            user.setActive(true);
+//            userService.saveUser(user);
+//        }
         //to set the join table between the user and chatroom
         if (!chatRoom.getUsers().contains(user)) {
             user.getRooms().add(chatRoom);
@@ -127,7 +146,7 @@ public class WelcomeController {
             chatRoom.getUsers().add(user);
             chatRoomService.saveChatRoom(chatRoom);
             //setting setUser to null because is already in the chatroom and is active
-            setUser = null;
+//            setUser = null;
         }
         model.put("user", user);
         model.put("chatRoom", chatRoom);
@@ -154,14 +173,13 @@ public class WelcomeController {
         return chatRoomService.findByChatRoomName(chatRoomName).isPresent();
     }
 
+// THIS COMMENTED CODE IS TO DYNAMICALLY UPDATE THE USERS LIST AND CHATROOM LIST IN THE WELCOME PAGE. NEED WORKS
 //    @GetMapping("/getUsers")
 //    @ResponseBody
 //    public List<UserDto> getUsers() {
 //        return userService.findAllUsersDto();
 //    }
-//
-//
-//
+
 //    @GetMapping("/getChatRooms")
 //    @ResponseBody
 //    public List<ChatRoom> getChatRooms() {

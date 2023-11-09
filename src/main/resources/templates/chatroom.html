@@ -35,9 +35,17 @@
         <h2 style="margin-left: 2em; color: #183e84">Chat Users:</h2>
         <div id="chatRoomUsers" style="display: inline"></div>
       </div>
-
-      <div id="chatRoomMessages"></div>
-
+      <div
+        style="
+          border: 2px solid #ccc;
+          width: 460px;
+          height: 120px;
+          overflow: auto;
+          border-radius: 4px;
+        "
+      >
+        <div id="chatRoomMessages"></div>
+      </div>
       <form
         th:action="@{/chatroom/{room_id}/user_id/{user_id}(room_id=${chatRoom.room_id},user_id=${user.user_id})}"
         method="post"
@@ -65,10 +73,11 @@
       function chatRoomUpdateData() {
         const roomId = document.getElementById("room_id").value;
         const username = document.getElementById("username").value;
+        // Fetch the messages from the server
         fetch(`/chatroom/${roomId}/messages`)
           .then((response) => response.json())
           .then((messages) => {
-            console.log(messages); // For debugging purposes
+            console.log("chatroom messages: ",messages); // For debugging purposes
             const userAndMessageContainer =
               document.getElementById("chatRoomMessages");
             userAndMessageContainer.innerHTML = ""; // Clear current messages
@@ -89,11 +98,11 @@
             });
           })
           .catch((error) => console.error("Error fetching messages:", error));
-
+        // Fetch the users from the server
         fetch(`/chatroom/${roomId}/users`)
           .then((response) => response.json())
           .then((users) => {
-            console.log(users); // For debugging purposes
+            console.log("users in this chatroom: ",users); // For debugging purposes
             const usersContainer = document.getElementById("chatRoomUsers");
             let usersString = "|"; // Initialize an empty string
             // Concatenate each username into the string

@@ -6,7 +6,8 @@ import java.util.List;
 public class UserDto {
     private Long user_id;
     private String username;
-    private boolean active;
+    private boolean selected;
+    private boolean inChatRoom;
     private List<String> messages = new ArrayList<>();
 
     private String chatRoomName;
@@ -27,12 +28,20 @@ public class UserDto {
         this.username = username;
     }
 
-    public boolean isActive() {
-        return active;
+    public boolean isSelected() {
+        return selected;
     }
 
-    public void setActive(boolean active) {
-        this.active = active;
+    public void setSelected(boolean selected) {
+        this.selected = selected;
+    }
+
+    public boolean isInChatRoom() {
+        return inChatRoom;
+    }
+
+    public void setInChatRoom(boolean inChatRoom) {
+        this.inChatRoom = inChatRoom;
     }
 
     public List<String> getMessages() {

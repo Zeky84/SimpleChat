@@ -38,6 +38,11 @@ public class ChatRoomController {
         return "chatroom";
     }
 
+    @GetMapping("/{room_id}")
+    public String handlePageErrors(@PathVariable Long room_id) {
+        return "chatroom";
+    }
+
 
     @PostMapping("/{room_id}/user_id/{user_id}")
     public String saveMessage(@PathVariable Long room_id, @PathVariable Long user_id, Message message) {
