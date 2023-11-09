@@ -41,7 +41,7 @@ public class ChatRoomService {
          return chatRoomRepository.findByChatRoomName(chatRoomName);
     }
 
-    public ChatRoomDto convertToJsonEntity(Long id) {
+    public ChatRoomDto convertFromEntityToJson(Long id) {
         //to send to the front end as a json
         ChatRoom chatRoom = chatRoomRepository.findById(id).orElse(null);
         ChatRoomDto chatRoomDto = new ChatRoomDto();

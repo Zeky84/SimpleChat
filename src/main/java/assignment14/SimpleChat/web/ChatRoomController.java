@@ -54,14 +54,14 @@ public class ChatRoomController {
     @GetMapping("/{room_id}/messages")
     @ResponseBody
     public Map<Long, List<String>> updateMessagesForChatRoom(@PathVariable Long room_id) {
-        ChatRoomDto chatRoomDto = chatRoomService.convertToJsonEntity(room_id);
+        ChatRoomDto chatRoomDto = chatRoomService.convertFromEntityToJson(room_id);
         return chatRoomDto.getMessages();
     }
 
     @GetMapping("/{room_id}/users")
     @ResponseBody
     public List<String> updateUsersInChatRoom(@PathVariable Long room_id) {
-        ChatRoomDto chatRoomDto = chatRoomService.convertToJsonEntity(room_id);
+        ChatRoomDto chatRoomDto = chatRoomService.convertFromEntityToJson(room_id);
         return chatRoomDto.getChatUsers();
     }
 
