@@ -67,23 +67,4 @@ public class UserService {
     }
 
 
-    public List<UserDto> findAllUsersDto() {
-        List<User> users = userRepository.findAll();
-        return users.stream().map(this::convertUserToUserDto).toList();
-    }
-
-    // This method is used to convert a User entity to a UserDto object
-    private UserDto convertUserToUserDto(@NotNull User user, String message) {
-        UserDto dto = new UserDto();
-        dto.setUser_id(user.getUser_id());
-        dto.setUsername(user.getUsername());
-        dto.setActive(user.isActive());
-        dto.setMessages(user.getMessages().stream().map(Message::getStringMessage).toList());
-        return dto;
-    }
-
-    private UserDto convertUserToUserDto(User user) {
-        return convertUserToUserDto(user, null); // or you can set a default message here
-    }
-
 }

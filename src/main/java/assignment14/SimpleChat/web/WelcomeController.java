@@ -154,17 +154,6 @@ public class WelcomeController {
         return chatRoomService.findByChatRoomName(chatRoomName).isPresent();
     }
 
-    @GetMapping("/getUsers")
-    @ResponseBody
-    public List<UserDto> getUsers() {
-        return userService.findAllUsersDto();
-    }
-
-    @GetMapping("/getChatRooms")
-    @ResponseBody
-    public List<ChatRoom> getChatRooms() {
-        return chatRoomService.findAll();
-    }
 
 
 }
