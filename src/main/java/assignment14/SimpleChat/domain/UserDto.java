@@ -9,6 +9,8 @@ public class UserDto {
     private boolean active;
     private List<String> messages = new ArrayList<>();
 
+    private String chatRoomName;
+
     public Long getUser_id() {
         return user_id;
     }
@@ -39,5 +41,13 @@ public class UserDto {
 
     public void setMessages(List<String> messages) {
         this.messages = messages;
+    }
+
+    public String getChatRoomName() {
+        return chatRoomName;
+    }
+
+    public void setChatRoomName(String chatRoomName) {
+        this.chatRoomName = chatRoomName;
     }
 }

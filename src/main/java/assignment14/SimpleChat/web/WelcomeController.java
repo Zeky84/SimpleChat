@@ -148,23 +148,24 @@ public class WelcomeController {
         return userService.findByUsername(username).isPresent();
     }
 
-    @GetMapping("/chatroomExists")
-    @ResponseBody
-    public Boolean chatroomExists(@RequestParam String chatRoomName) {
-        return chatRoomService.findByChatRoomName(chatRoomName).isPresent();
-    }
 
-    @GetMapping("/getUsers")
-    @ResponseBody
-    public List<UserDto> getUsers() {
-        return userService.findAllUsersDto();
-    }
-
-    @GetMapping("/getChatRooms")
-    @ResponseBody
-    public List<ChatRoom> getChatRooms() {
-        return chatRoomService.findAll();
-    }
-
+//    @GetMapping("/getUsers")
+//    @ResponseBody
+//    public List<UserDto> getUsers() {
+//        return userService.findAllUsersDto();
+//    }
+//
+//    @GetMapping("/chatroomExists")
+//    @ResponseBody
+//    public Boolean chatroomExists(@RequestParam String chatRoomName) {
+//        return chatRoomService.findByChatRoomName(chatRoomName).isPresent();
+//    }
+//
+//
+//    @GetMapping("/getChatRooms")
+//    @ResponseBody
+//    public List<ChatRoom> getChatRooms() {
+//        return chatRoomService.findAll();
+//    }
 
 }
