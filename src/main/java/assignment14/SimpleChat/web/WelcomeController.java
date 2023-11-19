@@ -39,6 +39,7 @@ public class WelcomeController {
         ChatRoom chatRoom = chatRoomService.findById(room_id);
         User user = userService.findById(user_id);
         user.setActive(false);
+        setUser=user;//TO KEEP THE USER SELECTED ONCE LEAVE THE CHATROOM UNTIL SELECT ANOTHER USER
         chatRoom.getUsers().remove(user);
         user.getRooms().remove(chatRoom);
         chatRoomService.saveChatRoom(chatRoom);
