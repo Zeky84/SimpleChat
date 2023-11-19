@@ -294,8 +294,11 @@
       };
       sessionStorage.setItem("sessionUser", JSON.stringify(sessionUser));
 
-      console.log("saving the json User: ",sessionUser);
-      console.log("getting the Json User: ",JSON.parse(sessionStorage.getItem("sessionUser")));
+      console.log("saving the json User: ", sessionUser);
+      console.log(
+        "getting the Json User: ",
+        JSON.parse(sessionStorage.getItem("sessionUser"))
+      );
 
       activeUsers.forEach(function (activeUser) {
         activeUser.addEventListener("click", () => {
@@ -318,8 +321,8 @@
               return response.json();
             })
             .then(function (data) {
-              console.log(data, "already exists username");
               if (data == true) {
+                console.log(data, "already exists username");
                 alert(
                   "Username already exists, please choose/create another one"
                 );
@@ -350,8 +353,8 @@
               return response.json();
             })
             .then(function (data) {
-              console.log(data, "already exists channel name");
               if (data == true) {
+                console.log(data, "already exists channel name");
                 alert(
                   "channel name already exists, please choose/create another one"
                 );
