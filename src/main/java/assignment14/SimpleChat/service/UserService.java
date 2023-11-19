@@ -44,9 +44,10 @@ public class UserService {
 
 
     public void deleteUser(Long user_id) {
+        //Only user with no messages while not active on chat room can be deleted
         User user = userRepository.findById(user_id).orElse(null);
         assert user != null;
-        if (user.isSelected()) {//WORK IN THIS PART!!!!!!!!!!!!!!!!!!!!!!!!!
+        if (!user.isActive()) {
             for (ChatRoom chatRoom : user.getRooms()) {
                 chatRoom.getUsers().remove(user);
                 chatRoomRepository.save(chatRoom);
