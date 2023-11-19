@@ -35,9 +35,17 @@
         <h2 style="margin-left: 2em; color: #183e84">Chat Users:</h2>
         <div id="chatRoomUsers" style="display: inline"></div>
       </div>
-
+      <div
+      style="
+        border: 2px solid #ccc;
+        width: 460px;
+        height: 120px;
+        overflow: auto;
+        border-radius: 4px;
+      "
+    >
       <div id="chatRoomMessages"></div>
-
+      </div>
       <form
         th:action="@{/chatroom/{room_id}/user_id/{user_id}(room_id=${chatRoom.room_id},user_id=${user.user_id})}"
         method="post"

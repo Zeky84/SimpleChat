@@ -38,6 +38,11 @@ public class ChatRoomController {
         return "chatroom";
     }
 
+    @GetMapping("/{room_id}")
+    public String handlePageErrors(@PathVariable Long room_id) {
+        return "chatroom";
+    }
+
 
     @PostMapping("/{room_id}/user_id/{user_id}")
     public String saveMessage(@PathVariable Long room_id, @PathVariable Long user_id, Message message) {
@@ -54,14 +59,14 @@ public class ChatRoomController {
     @GetMapping("/{room_id}/messages")
     @ResponseBody
     public Map<Long, List<String>> updateMessagesForChatRoom(@PathVariable Long room_id) {
-        ChatRoomDto chatRoomDto = chatRoomService.convertToJsonEntity(room_id);
+        ChatRoomDto chatRoomDto = chatRoomService.convertFromEntityToJson(room_id);
         return chatRoomDto.getMessages();
     }
 
     @GetMapping("/{room_id}/users")
     @ResponseBody
     public List<String> updateUsersInChatRoom(@PathVariable Long room_id) {
-        ChatRoomDto chatRoomDto = chatRoomService.convertToJsonEntity(room_id);
+        ChatRoomDto chatRoomDto = chatRoomService.convertFromEntityToJson(room_id);
         return chatRoomDto.getChatUsers();
     }
 

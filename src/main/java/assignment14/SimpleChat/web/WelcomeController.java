@@ -109,6 +109,7 @@ public class WelcomeController {
     public String setUserChatRoom(@PathVariable Long room_id, @PathVariable Long user_id, ModelMap model) {
         //to handle error
         if (userService.findById(user_id) == null || chatRoomService.findById(room_id) == null) {
+            System.out.println("!!!USER OR CHATROOM DOES NOT EXIST!!! NOT ALLOWED chatroom access");
             return "redirect:/chatroom";
         }
         User user = userService.findById(user_id);
@@ -154,18 +155,5 @@ public class WelcomeController {
         return chatRoomService.findByChatRoomName(chatRoomName).isPresent();
     }
 
-//    @GetMapping("/getUsers")
-//    @ResponseBody
-//    public List<UserDto> getUsers() {
-//        return userService.findAllUsersDto();
-//    }
-//
-//
-//
-//    @GetMapping("/getChatRooms")
-//    @ResponseBody
-//    public List<ChatRoom> getChatRooms() {
-//        return chatRoomService.findAll();
-//    }
 
 }
