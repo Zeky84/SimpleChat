@@ -24,8 +24,7 @@ public class User {
 
     private String username;
 
-    boolean selected = false;
-    boolean inChatRoom = false;
+    boolean active = false;
 
     @OneToMany(mappedBy = "user", fetch = FetchType.EAGER)
     private List<Message> messages = new ArrayList<>();
