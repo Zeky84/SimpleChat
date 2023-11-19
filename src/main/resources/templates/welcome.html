@@ -80,29 +80,7 @@
       <div th:if="${#lists.size(chatRooms)>0 and #lists.size(users)==0}">
         <h3 style="color: #aaaaaa">Please Create Chat User</h3>
       </div>
-      <div th:if="${setUser==null}">
-        <input type="hidden" id="setUserId" value="" />
-        <input type="hidden" id="setUserName" value="" />
-        <input type="hidden" id="setUserSelected" value="" />
-        <input type="hidden" id="setUserInChatRoom" value="" />
-        <input type="hidden" id="setUserChatroom" value="" />
-        <input type="hidden" id="setUserMessages" value="" />
-      </div>
-      <div th:if="${setUser!=null}">
-        <input type="hidden" th:field="${setUser.user_id}" id="setUserId" />
-        <input type="hidden" th:field="${setUser.username}" id="setUserName" />
-        <input type="hidden" th:field="${setUser.selected}" id="setUserSelected" />
-        <input type="hidden" th:field="${setUser.inChatRoom}" id="setUserInChatRoom">
-        <input
-          type="hidden"
-          th:field="${setUser.rooms[0].chatRoomName}"
-          id="setUserChatroom"
-        />
-        <input
-          type="hidden"
-          th:field="${setUser.rooms[0].messages}"
-          id="setUserMessages"
-        />
+      <div th:if="${setUser!=null }">
         <h3>[[${setUser.username}]]</h3>
         <h3 style="color: black">join channel!</h3>
         <form
@@ -127,23 +105,29 @@
           "
         >
           <div th:each="user: ${users}" class="users">
-            <div th:if="${user.selected==true}" class="active-user">
-              <div th:if="${user.rooms.isEmpty()}">
-                <a th:href="@{/setUser/{user_id}(user_id=${user.user_id})}"
-                  ><i style="color: #2b719f" class="fa-solid fa-user-slash"></i>
-                  <h3 style="color: #2b719f">[[${user.username}]]</h3></a
-                >
-                <h4>(selected)...pending to join chat</h4>
-              </div>
-              <div th:if="${not user.rooms.isEmpty()}">
+            <div th:if="${user.active==true}" class="active-user">
+              <span th:if="${user.rooms[0].messages.isEmpty}">
                 <a th:href="@{/setUser/{user_id}(user_id=${user.user_id})}"
                   ><i style="color: #ff5959" class="fa-solid fa-user-slash"></i>
                   <h3 style="color: #ff5959">[[${user.username}]]</h3></a
                 >
-                <h4>in chat [[${user.rooms[0].chatRoomName}]]</h4>
-              </div>
+                <h4>in chat room:</h4>
+                <h4 style="color: #3498db">
+                  [[${user.rooms[0].chatRoomName}]]
+                </h4>
+              </span>
+              <span th:if="${not user.rooms[0].messages.isEmpty}">
+                <a th:href="@{/setUser/{user_id}(user_id=${user.user_id})}"
+                  ><i style="color: #ff5959" class="fa-solid fa-user-slash"></i>
+                  <h3 style="color: #ff5959">[[${user.username}]]</h3></a
+                >
+                <h4>messaging in...</h4>
+                <h4 style="color: #3498db">
+                  [[${user.rooms[0].chatRoomName}]]
+                </h4>
+              </span>
             </div>
-            <div th:if="${user.selected==false}">
+            <div th:if="${user.active==false}">
               <span th:if="${user.messages.isEmpty}">
                 <a th:href="@{/setUser/{user_id}(user_id=${user.user_id})}"
                   ><i style="color: #3498db" class="fa-solid fa-user"></i>
@@ -275,29 +259,6 @@
       var createChannelButton = document.querySelector("#createChannel"); // to make sure a channel name is not created twice or empty
       var channelNameTextBox = document.querySelector("#channelName"); // to make sure a channel name is not created twice or empty
 
-      var setUserId = document.querySelector("#setUserId"); // to set the user id in session storage
-      var setUserName = document.querySelector("#setUserName"); // to set the user name in session storage
-      var setUserSelected = document.querySelector("#setUserSelected"); // to set the user active in session storage
-      var setUserInChatRoom = document.querySelector("#setUserInChatRoom"); // to set the user in chatroom in session storage
-      var setUserChatroom = document.querySelector("#setUserChatroom"); // to set the user chatroom in session storage
-      var setUserMessages = document.querySelector("#setUserMessages"); // to set the user messages in session storage
-
-      var sessionUser = {
-        id: setUserId.value,
-        username: setUserName.value,
-        selected: setUserSelected.value,
-        inChatRoom: setUserInChatRoom.value,
-        chatRoomName: setUserChatroom.value,
-        messages: setUserMessages.value,
-      };
-      sessionStorage.setItem("sessionUser", JSON.stringify(sessionUser));
-
-      console.log("saving the json User: ", sessionUser);
-      console.log(
-        "getting the Json User: ",
-        JSON.parse(sessionStorage.getItem("sessionUser"))
-      );
-
       activeUsers.forEach(function (activeUser) {
         activeUser.addEventListener("click", () => {
           console.log("active user");
@@ -319,8 +280,8 @@
               return response.json();
             })
             .then(function (data) {
+              console.log(data, "already exists username");
               if (data == true) {
-                console.log(data, "already exists username");
                 alert(
                   "Username already exists, please choose/create another one"
                 );
@@ -351,8 +312,8 @@
               return response.json();
             })
             .then(function (data) {
+              console.log(data, "already exists channel name");
               if (data == true) {
-                console.log(data, "already exists channel name");
                 alert(
                   "channel name already exists, please choose/create another one"
                 );
