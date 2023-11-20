@@ -250,14 +250,19 @@
       </div>
     </div>
     <script type="text/javascript">
-      var userDelButton = document.querySelector("#userDelButton"); 
-      var users = document.querySelectorAll(".users"); 
       var activeUsers = document.querySelectorAll(".active-user"); 
       var createUserButton = document.querySelector("#createUser"); 
       var usernameTextBox = document.querySelector("#username"); 
-      var chatRoomsList = document.querySelector("#chatRoomsList"); 
       var createChannelButton = document.querySelector("#createChannel"); 
       var channelNameTextBox = document.querySelector("#channelName"); 
+
+      activeUsers.forEach(function (user) {
+        user.addEventListener("click", function () {
+          console.log("active user clicked")
+          alert("Active user cannot be selected, please create/select another user");
+        });
+      });
+
       createUserButton.addEventListener("click", function () {
         if (usernameTextBox.value === "") {
           alert("Please enter a username");
@@ -320,34 +325,6 @@
             });
         }
       });
-
-      //   function updateUsers() {
-      //     fetch(`/getUsers`)
-      //       .then((response) => response.json())
-      //       .then((usersList) => {
-      //         console.log(usersList); // For debugging purposes
-      //         const usersListContainer = document.getElementById("usersList");
-      //         usersListContainer.innerHTML = ""; // Clear current messages
-      //         //iteration in Messages Map
-      //         usersList.forEach((user) => {
-      //           const username = user.username;
-      //           const booleanActive = user.active;
-      //           const chatRoomName = user.chatRoomName;
-      //           const userMessages = user.messages;
-      //           const userListElement = document.createElement("div");
-      //         if(booleanActive==true){
-
-      //         }
-      //           userListElement.innerHTML = `<h4>${username}:</h4>`;
-      //           usersListContainer.appendChild(userListElement);
-      //         });
-      //       })
-      //       .catch((error) => console.error("Error fetching messages:", error));
-      //   }
-      //   // Poll for new messages every 3 seconds
-      //   setInterval(updateUsers, 5000);
-      //   // Initial call to load the messages when the page is first loaded
-      //   updateUsers();
     </script>
   </body>
 </html>
