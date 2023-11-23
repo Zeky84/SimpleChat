@@ -1,2 +1,2 @@
 # SimpleChat
-Simple chat app that pretends to put on practice the full CRUD basics mixed with a dynamic web interaction. 
+SimpleChat is an interactive chat application designed to demonstrate the core principles of CRUD (Create, Read, Update, Delete) operations in web development, combined with dynamic web page interaction. The backend is developed using Spring Boot, incorporating Java, Maven, Thymeleaf, and Hibernate, and is connected to a MySQL database. The frontend is crafted with vanilla JavaScript, HTML, and CSS, providing a seamless user experience. This project aims to showcase the integration of modern web technologies in creating a real-time chat application.
